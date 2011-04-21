@@ -1,0 +1,5 @@
+jflex src/alchemy.jflex
+jflex src/elements.jflex
+jflex src/magic.jflex
+rm src/*~
+javac src/*.java -d bin/
