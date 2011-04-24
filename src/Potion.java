@@ -16,18 +16,20 @@ public class Potion {
 			this.elements.add(e1);
 		}
 	}
-
 	
-
+	public Element get(int index){
+		return elements.get(index);
+	}
+	
+	public boolean has(Element e){
+		return elements.contains(e);
+	}
 
 	@Override
 	public int hashCode() {
 		return (int)(Math.pow(2, elements.get(0).getId())*Math.pow(3, elements.get(1).getId()));
 	}
-
-
-
-
+	
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -44,7 +46,6 @@ public class Potion {
 			return false;
 		return true;
 	}
-
 
 	@Override
 	public String toString() {
