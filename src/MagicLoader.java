@@ -5,9 +5,8 @@ import java.util.List;
 
 public class MagicLoader {
 
-	public static HashMap<Potion, Element> load(String elementsFilename,
+	public static HashMap<Potion, Element> load(List<Element> elementsList, String elementsFilename,
 			String magicFilename) {
-		List<Element> elementsList = ElementLoader.load(elementsFilename);
 		HashMap<Potion, Element> magic = null;
 		Reader reader;
 		
@@ -19,13 +18,10 @@ public class MagicLoader {
 				magic = lexer.yylex();
 			} while (magic == null);
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("/!\\ Nombre del archivo de magia inválido.");
+			System.exit(1);
 		}
-		/*
-		 * for(Entry<Potion, Element> entry: magic.entrySet())
-		 * System.out.println(entry);
-		 */
-					
+							
 		return magic;	
 	}
 }

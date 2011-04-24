@@ -5,32 +5,35 @@
 
 %{
 	private String e1;
-	private boolean plus;
 	private String ans;
 %}
 
 L = [a-z]
 W = [\t" "]
+%state PLUS
+%state ELEMENT2
+%state ERROR
 
 %%
 
-{L}+			{ 
-					if(!plus)
-						e1 = yytext();
-					else if(e1 != null){
+<YYINITIAL> {L}+	{e1 = yytext(); yybegin(PLUS);}
+<PLUS>		\+		{yybegin(ELEMENT2);}
+<ELEMENT2>	{L}+	{
 						ans = e1+"+"+yytext();
 						e1 = null;
-						plus = false;						
+						yybegin(YYINITIAL);
 						return ans;
-					} else
-						plus = false;
-				}
-{W}*			{}
-\+				{plus = true;}
-\n				{}
-[0-9]+|[A-Z]+	{
-					e1 = null;
-					plus = false;
-					ans = null;
-					System.out.println("???");
-				}
+					}
+								
+{W}*	{}
+
+<YYINITIAL>	\n		{}
+<PLUS>		\n		{}
+<ELEMENT2>	\n		{}
+<ERROR>		\n		{System.out.println("/!\\ Comando inválido."); yybegin(YYINITIAL);}
+
+[^a-z] | {L}+		{
+						e1 = null;
+						ans = null;
+						yybegin(ERROR);						
+					}
