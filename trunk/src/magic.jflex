@@ -37,12 +37,11 @@ D = [0-9]
 %state POTION
 
 %%
-<YYINITIAL> {D}+:/\n					{result = getResult(yytext());}
+<YYINITIAL> {D}+:/\n					{}
 <YYINITIAL> {D}+:						{result = getResult(yytext()); yybegin(POTION);}
 <POTION> 	" "{D}+" "{D}+/,				{
 											magic.put(getPotion(yytext()), result);	
 											yybegin(POTION);
-											
 										}
 <POTION> 	" "{D}+" "{D}+				{
 											magic.put(getPotion(yytext()), result);

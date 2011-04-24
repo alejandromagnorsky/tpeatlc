@@ -10,4 +10,4 @@ L = [a-z]
 {L}+			{return yytext();}
 .*				{}
 \n				{}
-<<EOF>>        {return "EOF";}
+<<EOF>>        	{return "EOF";}

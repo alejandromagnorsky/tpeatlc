@@ -22,7 +22,8 @@ public class ElementLoader {
 			} while (!yytext.equals("EOF"));
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			System.out.println("/!\\ Nombre del archivo de elementos inválido.");
+			System.exit(1);
 		}
 		return elements;
 	}
