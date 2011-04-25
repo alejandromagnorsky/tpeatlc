@@ -1,23 +1,12 @@
-/*import java.util.ArrayList;
-import java.util.List;*/
-
 public class Element implements Comparable<Element>{
 
 	private int id;
 	private String name;
-	//private DerivedElements derived;
 
-	public Element(int id, String name/*, List<Element> l*/) {
+	public Element(int id, String name) {
 		this.id = id;
 		this.name = name;
-		//this.derived = new DerivedElements(l);
 	}
-	
-	/*public Element(int id, String name) {
-		this.id = id;
-		this.name = name;
-		this.derived = new DerivedElements();
-	}*/
 
 	public int getId() {
 		return id;
@@ -26,10 +15,6 @@ public class Element implements Comparable<Element>{
 	public String getName() {
 		return name;
 	}
-	
-	/*public List<Element> getDerived(){
-		return this.derived.getList();
-	}*/
 	
 	@Override
 	public boolean equals(Object obj) {
@@ -49,24 +34,7 @@ public class Element implements Comparable<Element>{
 	public String toString() {
 		return "Element [id=" + id + ", name=" + name + "]";
 	}
-
-	/*private class DerivedElements {
-		List<Element> l;
-		
-		public DerivedElements(){
-			this.l = new ArrayList<Element>();
-		}
-		
-		public DerivedElements(List<Element> l){
-			this.l = new ArrayList<Element>();
-			this.l.addAll(l);
-		}
-		
-		public List<Element> getList(){
-			return this.l;
-		}
-	}*/
-
+	
 	@Override
 	public int compareTo(Element o) {
 		return this.getName().compareTo(o.getName());

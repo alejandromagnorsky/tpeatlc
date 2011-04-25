@@ -1,4 +1,6 @@
 import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 
 public class Alchemy {
 	private static final String ELEMENTS_DEFAULT = "resources/myelements.name";
@@ -14,10 +16,12 @@ public class Alchemy {
 			String arg = args[0];
 			if (arg.equals("-h")) {
 				printHelpDesk();
+				printBasicElements(alchemist);
+				System.out.println("--------------------------------------------------------------------------------");
 			} else if (arg.equals("-t")) {
-				alchemist.printTerminalElements();
+				printTerminalElements(alchemist);
 			} else if (arg.equals("-b")) {
-				alchemist.printBasicElements();
+				printBasicElements(alchemist);
 			} else {
 				System.out.println("/!\\ Secuencia de parámetros inválida.");
 			}
@@ -34,12 +38,11 @@ public class Alchemy {
 			} else {
 				alchemist = new Alchemist(ELEMENTS_DEFAULT, MAGICK_DEFAULT);
 				if (arg1.equals("-e")) {
-					alchemist.printDerivedElements(arg2);
+					printDerivedElements(arg2, alchemist);
 				} else if (arg1.equals("-b")) {
-					alchemist.printBasicIngredientsFromElement(arg2);
+					printBasicIngredientsFromElement(arg2, alchemist);
 				} else {
-					System.out
-							.println("/!\\ Secuencia de parámetros inválida.");
+					System.out.println("/!\\ Secuencia de parámetros inválida.");
 				}
 				return;
 			}
@@ -68,30 +71,63 @@ public class Alchemy {
 		} while (yytext != null);
 		System.exit(0);
 	}
-
+	
+	public static void printBasicElements(Alchemist a){
+		List<Element> l = a.getBasicElements();
+		for (Element e : l)
+			System.out.println(e.getName());
+	}
+	
+	public static void printBasicIngredientsFromElement(String e, Alchemist a){
+		List<Element> l = a.getBasicIngredientsFromElement(e);
+		if (l == null){
+			System.out.println("/!\\ No existe el elemento '" + e + "'.");
+		} else {
+			if (!l.isEmpty()){
+				Collections.sort(l);
+				for (Element elem : l)
+					System.out.println(elem.getName());
+			} else
+				System.out.println(e + " es básico.");
+		}
+	}
+	
+	public static void printDerivedElements(String e, Alchemist a){
+		List<Element> l = a.getDerivedElements(e);
+		if (l == null){
+			System.out.println("/!\\ No existe el elemento '" + e + "'.");
+		} else {
+			if (!l.isEmpty()){
+				Collections.sort(l);
+				for (Element elem : l)
+					System.out.println(elem.getName());
+			} else
+				System.out.println(e + " es terminal.");
+		}		
+	}
+	
+	public static void printTerminalElements(Alchemist a){
+		List<Element> l = a.getTerminalElements();
+		for (Element e : l)
+			System.out.println(e.getName());
+	}
+	
 	private static void printHelpDesk() {
-		System.out
-				.println("--------------------------------------------------------------------------------");
-		System.out
-				.println("-------------------------------- MESA DE AYUDA ---------------------------------");
-		System.out
-				.println("--------------------------------------------------------------------------------");
-		System.out
-				.println("Juego en el que, partiendo de un grupo de elementos básicos, se deben");
+		System.out.println("--------------------------------------------------------------------------------");
+		System.out.println("-------------------------------- MESA DE AYUDA ---------------------------------");
+		System.out.println("--------------------------------------------------------------------------------");
+		System.out.println("Juego en el que, partiendo de un grupo de elementos básicos, se deben");
 		System.out.println("formar y descubrir los restantes.");
-		System.out
-				.println("Por ejemplo, si el usuario quiere intentar combinar el elementoA y el");
+		System.out.println("Por ejemplo, si el usuario quiere intentar combinar el elementoA y el");
 		System.out.println("elementoB la sintaxis es de la forma:");
 		System.out.println("elementoA + elementoB");
 		System.out.println();
 		System.out.println(">>> COMANDOS ÚTILES:");
 		System.out.println("	- '-e <elemento>':");
-		System.out
-				.println("		Imprime los elementos que se pueden formar usando <elemento>.");
+		System.out.println("		Imprime los elementos que se pueden formar usando <elemento>.");
 		System.out.println();
 		System.out.println("	- '-b <elemento>':");
-		System.out
-				.println("		Imprime aquellos elementos que generan <elemento>.");
+		System.out.println("		Imprime aquellos elementos que generan <elemento>.");
 		System.out.println();
 		System.out.println("	- '-b':");
 		System.out.println("		Imprime todos los elementos básicos.");
@@ -107,7 +143,6 @@ public class Alchemy {
 		System.out.println();
 		System.out.println("	- '-h':");
 		System.out.println("		Imprime la mesa de ayuda.");
-		System.out
-				.println("--------------------------------------------------------------------------------");
+		System.out.println("--------------------------------------------------------------------------------");
 	}
 }

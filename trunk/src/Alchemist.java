@@ -24,48 +24,38 @@ public class Alchemist {
 		return magic.get(potion);
 	}
 	
-	public void printTerminalElements(){
+	public List<Element> getTerminalElements(){
 		List<Element> l = this.spellbook.getTerminalElements(elements, magic);
 		Collections.sort(l);
-		for (Element e : l)
-			System.out.println(e.getName());
+		return l;
 	}
 	
-	public void printDerivedElements(String e){
+	public List<Element> getDerivedElements(String e){
 		Element element = getElement(e);		
-		if (element == null){
-			System.out.println("/!\\ No existe el elemento '" + e + "'.");
-		} else {
+		if (element == null)
+			return null;
+		else {
 			List<Element> l = this.spellbook.getDerivedElements(element, magic);
-			if (!l.isEmpty()){
-				Collections.sort(l);
-				for (Element elem : l)
-					System.out.println(elem.getName());
-			} else
-				System.out.println(e + " es terminal.");
-		}			
-	}
-	
-	public void printBasicIngredientsFromElement(String e){
-		Element element = getElement(e);		
-		if (element == null){
-			System.out.println("/!\\ No existe el elemento '" + e + "'.");
-		} else {
-			List<Element> l = this.spellbook.getBasicIngredientsFromElement(element, magic);
-			if (!l.isEmpty()){
-				Collections.sort(l);
-				for (Element elem : l)
-					System.out.println(elem.getName());
-			} else
-				System.out.println(e + " es básico.");
+			Collections.sort(l);
+			return l;
 		}
 	}
 	
-	public void printBasicElements(){
+	public List<Element> getBasicIngredientsFromElement(String e){
+		Element element = getElement(e);		
+		if (element == null)
+			return null;
+		else {
+			List<Element> l = this.spellbook.getBasicIngredientsFromElement(element, magic);
+			Collections.sort(l);
+			return l;
+		}
+	}
+	
+	public List<Element> getBasicElements(){
 		List<Element> l = this.spellbook.getBasicElements(elements, magic);
 		Collections.sort(l);
-		for (Element elem : l)
-			System.out.println(elem.getName());
+		return l;
 	}
 	
 	private Element getElement(String e){
