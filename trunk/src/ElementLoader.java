@@ -1,4 +1,5 @@
 import java.io.FileReader;
+import java.io.IOException;
 import java.io.Reader;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,9 +21,11 @@ public class ElementLoader {
 					i++;
 				}
 			} while (!yytext.equals("EOF"));
-
-		} catch (Exception e) {
-			System.out.println("/!\\ Nombre del archivo de elementos inválido.");
+		} catch (IllegalArgumentException e) {
+			System.out.println("/!\\ Formato de archivo de nombres inválido.");
+			System.exit(1);
+		} catch (IOException e) {
+			System.out.println("/!\\ Archivo de nombres inexistente.");
 			System.exit(1);
 		}
 		return elements;
