@@ -9,7 +9,7 @@ public class Alchemist {
 	private SpellBook spellbook;
 
 	public Alchemist(String elements, String magic) {
-		this.elements = ElementLoader.load(elements);
+		this.elements = ElementsLoader.load(elements);
 		this.magic = MagicLoader.load(this.elements, elements, magic);
 		this.spellbook = SpellBook.getInstance();
 	}
