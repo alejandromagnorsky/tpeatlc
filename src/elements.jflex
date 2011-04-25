@@ -8,6 +8,6 @@ L = [a-z]
 %%
 
 {L}+			{return yytext();}
-.*				{}
 \n				{}
+.+				{throw new IllegalArgumentException();}
 <<EOF>>        	{return "EOF";}

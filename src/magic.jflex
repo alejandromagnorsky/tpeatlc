@@ -23,11 +23,15 @@ import java.util.List;
 		spaceIndex = yytext.lastIndexOf(" ");
 		id1 = Integer.valueOf(yytext.substring(1, spaceIndex));
 		id2 = Integer.valueOf(yytext.substring(spaceIndex+1));
+		if(id1 > elementsList.size() || id2 > elementsList.size())
+			throw new IllegalArgumentException();
 		return new Potion(elementsList.get(id1-1), elementsList.get(id2-1));
 	}
 	
 	public Element getResult(String yytext){
 		int resultId = Integer.valueOf(yytext.substring(0, yytext.indexOf(":")));
+		if(resultId > elementsList.size())
+			throw new IllegalArgumentException();
 		return elementsList.get(resultId-1);
 	}
 	
@@ -48,4 +52,5 @@ D = [0-9]
 											yybegin(YYINITIAL);
 										}
 , | \n									{}
+[^0-9] | {D}+							{throw new IllegalArgumentException();}
 <<EOF>>        							{return magic;}
