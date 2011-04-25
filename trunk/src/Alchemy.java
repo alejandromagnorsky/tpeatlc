@@ -7,22 +7,23 @@ public class Alchemy {
 	private static final String MAGIC_DEFAULT = "resources/myelements.magic";
 	private static String ELEMENTS_SRC = ELEMENTS_DEFAULT;
 	private static String MAGIC_SRC = MAGIC_DEFAULT;
-
+	private static Alchemist alchemist;
+	
 	public static void main(String[] args) throws IOException {
 		
 		printLogo();
 		
-		Alchemist alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
+		alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
 		boolean sourcesFlag = false;
 		
 		for (int i=0; i < args.length; i++){
 			String arg1 = args[i];
 			if (arg1.equals("-h")){
 				printHelpDesk();
-				printBasicElements(alchemist);
+				printBasicElements();
 				System.out.println("--------------------------------------------------------------------------------");
 			} else if (arg1.equals("-t")){
-				printTerminalElements(alchemist);				
+				printTerminalElements();				
 			} else if (arg1.equals("-b") || arg1.equals("-e") || arg1.equals("-n") || arg1.equals("-m")){
 				if (i+1 >= args.length){
 					System.out.println("/!\\ Secuencia de argumentos inválida.");
@@ -30,9 +31,9 @@ public class Alchemy {
 				}
 				String arg2 = args[++i];
 				if (arg1.equals("-b")){
-					printBasicIngredientsFromElement(arg2, alchemist);
+					printBasicIngredientsFromElement(arg2);
 				} else if (arg1.equals("-e")){
-					printDerivedElements(arg2, alchemist);
+					printDerivedElements(arg2);
 				} else if (arg1.equals("-n")){
 					ELEMENTS_SRC = arg2;
 					sourcesFlag = true;
@@ -40,21 +41,22 @@ public class Alchemy {
 					MAGIC_SRC = arg2;
 					sourcesFlag = true;
 				}
+				if (sourcesFlag){
+					alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
+					sourcesFlag = false;
+				}
 			} else {
 				System.out.println("/!\\ Secuencia de argumentos inválida.");
 				return;
 			}
 		}
 		
-		if (sourcesFlag)
-			alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
-		
 		AlchemyLexer lexer = new AlchemyLexer(System.in);
 		String yytext = null, element1, element2;
 		Element result;
 		yytext = lexer.yylex();
 		if (yytext == null)
-			return;
+			System.exit(0);
 		do {
 			element1 = yytext.substring(0, yytext.indexOf("+"));
 			element2 = yytext.substring(yytext.indexOf("+") + 1);
@@ -108,14 +110,14 @@ public class Alchemy {
 		return quote;
 	}
 	
-	public static void printBasicElements(Alchemist a){
-		List<Element> l = a.getBasicElements();
+	public static void printBasicElements(){
+		List<Element> l = alchemist.getBasicElements();
 		for (Element e : l)
 			System.out.println(e.getName());
 	}
 	
-	public static void printBasicIngredientsFromElement(String e, Alchemist a){
-		List<Element> l = a.getBasicIngredientsFromElement(e);
+	public static void printBasicIngredientsFromElement(String e){
+		List<Element> l = alchemist.getBasicIngredientsFromElement(e);
 		if (l == null){
 			System.out.println("/!\\ No existe el elemento '" + e + "'.");
 		} else {
@@ -128,8 +130,8 @@ public class Alchemy {
 		}
 	}
 	
-	public static void printDerivedElements(String e, Alchemist a){
-		List<Element> l = a.getDerivedElements(e);
+	public static void printDerivedElements(String e){
+		List<Element> l = alchemist.getDerivedElements(e);
 		if (l == null){
 			System.out.println("/!\\ No existe el elemento '" + e + "'.");
 		} else {
@@ -142,8 +144,8 @@ public class Alchemy {
 		}		
 	}
 	
-	public static void printTerminalElements(Alchemist a){
-		List<Element> l = a.getTerminalElements();
+	public static void printTerminalElements(){
+		List<Element> l = alchemist.getTerminalElements();
 		for (Element e : l)
 			System.out.println(e.getName());
 	}
