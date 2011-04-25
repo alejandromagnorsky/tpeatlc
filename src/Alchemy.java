@@ -4,55 +4,51 @@ import java.util.List;
 
 public class Alchemy {
 	private static final String ELEMENTS_DEFAULT = "resources/myelements.name";
-	private static final String MAGICK_DEFAULT = "resources/myelements.magic";
-
-	// |-> Si, con K, no leíste a Aleister Crowley?
+	private static final String MAGIC_DEFAULT = "resources/myelements.magic";
+	private static String ELEMENTS_SRC = ELEMENTS_DEFAULT;
+	private static String MAGIC_SRC = MAGIC_DEFAULT;
 
 	public static void main(String[] args) throws IOException {
-		Alchemist alchemist;
-
-		if (args.length == 1) {
-			alchemist = new Alchemist(ELEMENTS_DEFAULT, MAGICK_DEFAULT);
-			String arg = args[0];
-			if (arg.equals("-h")) {
+		
+		printLogo();
+		
+		Alchemist alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
+		boolean sourcesFlag = false;
+		
+		for (int i=0; i < args.length; i++){
+			String arg1 = args[i];
+			if (arg1.equals("-h")){
 				printHelpDesk();
 				printBasicElements(alchemist);
 				System.out.println("--------------------------------------------------------------------------------");
-			} else if (arg.equals("-t")) {
-				printTerminalElements(alchemist);
-			} else if (arg.equals("-b")) {
-				printBasicElements(alchemist);
-			} else {
-				System.out.println("/!\\ Secuencia de parámetros inválida.");
-			}
-			return;
-		} else if (args.length == 2) {
-			String arg1 = args[0];
-			String arg2 = args[1];
-			if (arg1.equals("-n") || arg1.equals("-m")) {
-				if (arg1.equals("-n")) {
-					alchemist = new Alchemist(arg2, MAGICK_DEFAULT);
-				} else {
-					alchemist = new Alchemist(ELEMENTS_DEFAULT, arg2);
+			} else if (arg1.equals("-t")){
+				printTerminalElements(alchemist);				
+			} else if (arg1.equals("-b") || arg1.equals("-e") || arg1.equals("-n") || arg1.equals("-m")){
+				if (i+1 >= args.length){
+					System.out.println("/!\\ Secuencia de argumentos inválida.");
+					return;
 				}
-			} else {
-				alchemist = new Alchemist(ELEMENTS_DEFAULT, MAGICK_DEFAULT);
-				if (arg1.equals("-e")) {
-					printDerivedElements(arg2, alchemist);
-				} else if (arg1.equals("-b")) {
+				String arg2 = args[++i];
+				if (arg1.equals("-b")){
 					printBasicIngredientsFromElement(arg2, alchemist);
+				} else if (arg1.equals("-e")){
+					printDerivedElements(arg2, alchemist);
+				} else if (arg1.equals("-n")){
+					ELEMENTS_SRC = arg2;
+					sourcesFlag = true;
 				} else {
-					System.out.println("/!\\ Secuencia de parámetros inválida.");
+					MAGIC_SRC = arg2;
+					sourcesFlag = true;
 				}
+			} else {
+				System.out.println("/!\\ Secuencia de argumentos inválida.");
 				return;
 			}
-		} else if (args.length == 0) {
-			alchemist = new Alchemist(ELEMENTS_DEFAULT, MAGICK_DEFAULT);
-		} else {
-			System.out.println("/!\\ Secuencia de parámetros inválida.");
-			return;
 		}
-
+		
+		if (sourcesFlag)
+			alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
+		
 		AlchemyLexer lexer = new AlchemyLexer(System.in);
 		String yytext = null, element1, element2;
 		Element result;
@@ -70,6 +66,46 @@ public class Alchemy {
 			yytext = lexer.yylex();
 		} while (yytext != null);
 		System.exit(0);
+	}
+	
+	public static void printLogo(){
+		System.out.println("	 ___");
+		System.out.println("	 -   -_, ,,      ,,                   -_   _");
+		System.out.println("	(  ~/||  ||      ||                     |,- `");
+		System.out.println("	(  / ||  ||  _-_ ||/\\\\  _-_  \\\\/\\\\/\\\\  ~||__))");
+		System.out.println("	 \\/==||  || ||   || || || \\\\ || || ||  ~||__))");
+		System.out.println("	 /_ _||  || ||   || || ||/   || || ||   |_ _,");
+		System.out.println("	(  - \\\\, \\\\ \\\\,/ \\\\ |/ \\\\,/  \\\\ \\\\ \\\\  -' -");
+		System.out.println("	                   _/                 ( _-_");
+		System.out.println("==============================================================");
+		System.out.println(randomMrCrowleyQuote());
+		System.out.println(" 					Aleister Crowley");
+		System.out.println("==============================================================");
+	}
+	
+	private static String randomMrCrowleyQuote(){
+		String quote;
+		switch((int)(Math.random()*10)){
+		case 0:
+			quote = "\"Science is always discovering odd scraps of magical wisdom\nand making a tremendous fuss about its cleverness.\"";
+			break;
+		case 1:
+			quote = "\"The people who have really made history are the martyrs.\"";
+			break;
+		case 2:
+			quote = "\"The pious pretense that evil does not exist only makes it\nvague, enormous and menacing.\"";
+			break;
+		case 3:
+			quote = "\"One would go mad if one took the Bible seriously; but to\ntake it seriously one must be already mad.\"";
+			break;
+		case 4:
+			quote = "\"The sin which is unpardonable is knowingly and wilfully to\nreject truth, to fear knowledge lest that knowledge\npander not to thy prejudices.\"";
+			break;
+		default:
+			quote = "\"Magick is the science and art of causing change to occur\nin conformity with will.\"";
+			break;
+		}
+		return quote;
 	}
 	
 	public static void printBasicElements(Alchemist a){
