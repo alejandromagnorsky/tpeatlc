@@ -14,42 +14,65 @@ public class Alchemy {
 		printLogo();
 		
 		alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
-		boolean sourcesFlag = false;
+		boolean hFlag = false;
+		boolean tFlag = false;
+		boolean bFlag = false;
+		boolean eFlag = false;
+		boolean nmFlag = false;
+		String bArg = null;
+		String eArg = null;
 		
 		for (int i=0; i < args.length; i++){
 			String arg1 = args[i];
-			if (arg1.equals("-h")){
-				printHelpDesk();
-				printBasicElements();
-				System.out.println("--------------------------------------------------------------------------------");
-			} else if (arg1.equals("-t")){
-				printTerminalElements();				
-			} else if (arg1.equals("-b") || arg1.equals("-e") || arg1.equals("-n") || arg1.equals("-m")){
+			if (arg1.equals("-h"))
+				hFlag = true;
+			else if (arg1.equals("-t"))
+				tFlag = true;				
+			else if (arg1.equals("-b") || arg1.equals("-e") || arg1.equals("-n") || arg1.equals("-m")){
 				if (i+1 >= args.length){
 					System.out.println("/!\\ Secuencia de argumentos inválida.");
 					return;
 				}
-				String arg2 = args[++i];
 				if (arg1.equals("-b")){
-					printBasicIngredientsFromElement(arg2);
+					bArg = args[++i];
+					bFlag = true;
 				} else if (arg1.equals("-e")){
-					printDerivedElements(arg2);
+					eArg = args[++i];
+					eFlag = true;
 				} else if (arg1.equals("-n")){
-					ELEMENTS_SRC = arg2;
-					sourcesFlag = true;
+					ELEMENTS_SRC = args[++i];
+					nmFlag = true;
 				} else {
-					MAGIC_SRC = arg2;
-					sourcesFlag = true;
-				}
-				if (sourcesFlag){
-					alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
-					sourcesFlag = false;
+					MAGIC_SRC = args[++i];
+					nmFlag = true;
 				}
 			} else {
 				System.out.println("/!\\ Secuencia de argumentos inválida.");
 				return;
 			}
 		}
+		
+		/////////////
+		// ONER ESTO EN EL INFORME, DECISIOND E DISEÑO: para evitar comportamiento de los comandos
+		// no ideales, decidimos ordenar la ejecucion de los comandos -n/-m -h -t -b -e  y además
+		// si se meten 2 comandos iguales, solo se toma el último, el primr no tiene efecto.
+		// explicar mejor en el informe.
+		
+		// decirle a ale lo de   dsfd +h^[[3~
+		////////////
+		if (nmFlag)
+			alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
+		if (hFlag){
+			printHelpDesk();
+			printBasicElements();
+			System.out.println("--------------------------------------------------------------------------------");
+		}
+		if (tFlag)
+			printTerminalElements();
+		if (bFlag)
+			printBasicIngredientsFromElement(bArg);
+		if (eFlag)
+			printDerivedElements(eArg);
 		
 		AlchemyLexer lexer = new AlchemyLexer(System.in);
 		String yytext = null, element1, element2;
@@ -112,6 +135,7 @@ public class Alchemy {
 	
 	public static void printBasicElements(){
 		List<Element> l = alchemist.getBasicElements();
+		System.out.println("Elementos básicos:");
 		for (Element e : l)
 			System.out.println(e.getName());
 	}
@@ -123,6 +147,7 @@ public class Alchemy {
 		} else {
 			if (!l.isEmpty()){
 				Collections.sort(l);
+				System.out.println("Elementos básicos que forman '" + e + "':");
 				for (Element elem : l)
 					System.out.println(elem.getName());
 			} else
@@ -137,6 +162,7 @@ public class Alchemy {
 		} else {
 			if (!l.isEmpty()){
 				Collections.sort(l);
+				System.out.println("Elementos que pueden ser formados a partir de '" + e + "':");
 				for (Element elem : l)
 					System.out.println(elem.getName());
 			} else
@@ -146,6 +172,7 @@ public class Alchemy {
 	
 	public static void printTerminalElements(){
 		List<Element> l = alchemist.getTerminalElements();
+		System.out.println("Elementos terminales:");
 		for (Element e : l)
 			System.out.println(e.getName());
 	}
