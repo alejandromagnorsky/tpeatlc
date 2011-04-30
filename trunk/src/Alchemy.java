@@ -186,9 +186,6 @@ public class Alchemy {
 		System.out.println("	- '-b <elemento>':");
 		System.out.println("		Imprime aquellos elementos que generan <elemento>.");
 		System.out.println();
-		System.out.println("	- '-b':");
-		System.out.println("		Imprime todos los elementos básicos.");
-		System.out.println();
 		System.out.println("	- '-t':");
 		System.out.println("		Imprime todos los elementos terminales.");
 		System.out.println();
