@@ -51,15 +51,7 @@ public class Alchemy {
 				return;
 			}
 		}
-		
-		/////////////
-		// ONER ESTO EN EL INFORME, DECISIOND E DISEÑO: para evitar comportamiento de los comandos
-		// no ideales, decidimos ordenar la ejecucion de los comandos -n/-m -h -t -b -e  y además
-		// si se meten 2 comandos iguales, solo se toma el último, el primr no tiene efecto.
-		// explicar mejor en el informe.
-		
-		// decirle a ale lo de   dsfd +h^[[3~
-		////////////
+
 		if (nmFlag)
 			alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
 		if (hFlag){
