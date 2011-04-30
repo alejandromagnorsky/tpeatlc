@@ -21,7 +21,8 @@ public class SpellBook {
 		while (it.hasNext()){
 			Map.Entry<Potion,Element> pair = it.next();
 			if (pair.getKey().has(e))
-				derived.add(pair.getValue());
+				if(!derived.contains(pair.getValue()))
+					derived.add(pair.getValue());
 		}
 		return derived;
 	}
