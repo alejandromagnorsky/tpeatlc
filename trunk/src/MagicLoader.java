@@ -25,7 +25,7 @@ public class MagicLoader {
 			System.out.println("/!\\ Archivo de magias inexistente.");
 			System.exit(1);
 		}
-		
+
 		return magic;
 	}
 }

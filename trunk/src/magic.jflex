@@ -19,10 +19,17 @@ import java.util.List;
 	}
 	
 	public Potion getPotion(String yytext){
-		int id1, id2, spaceIndex;
-		spaceIndex = yytext.lastIndexOf(" ");
-		id1 = Integer.valueOf(yytext.substring(1, spaceIndex));
-		id2 = Integer.valueOf(yytext.substring(spaceIndex+1));
+		int id1 = 0, id2 = 0;
+		String[] strings = yytext.split(" ");
+		for(int i = 0; i < strings.length; i++)
+			if(strings[i].length() != 0){
+				if(id1 == 0)
+					id1 = Integer.valueOf(strings[i].trim());
+				else{
+					id2 = Integer.valueOf(strings[i].trim());
+				}
+					
+			}
 		if(id1 > elementsList.size() || id2 > elementsList.size())
 			throw new IllegalArgumentException();
 		return new Potion(elementsList.get(id1-1), elementsList.get(id2-1));
@@ -38,19 +45,20 @@ import java.util.List;
 %}
 
 D = [0-9]
+W = [" "\t]
 %state POTION
 
 %%
-<YYINITIAL> {D}+:/\n					{}
-<YYINITIAL> {D}+:						{result = getResult(yytext()); yybegin(POTION);}
-<POTION> 	" "{D}+" "{D}+/,				{
+<YYINITIAL> {D}+:/{W}*\n				{}
+<YYINITIAL> {D}+:/{W}*					{result = getResult(yytext()); yybegin(POTION);}
+<POTION> 	{W}+{D}+{W}+{D}+/{W}*,		{
 											magic.put(getPotion(yytext()), result);	
 											yybegin(POTION);
 										}
-<POTION> 	" "{D}+" "{D}+				{
+<POTION> 	{W}+{D}+{W}+{D}+/{W}*		{	
 											magic.put(getPotion(yytext()), result);
 											yybegin(YYINITIAL);
 										}
-, | \n									{}
+, | \n	| {W}							{}
 [^0-9] | {D}+							{throw new IllegalArgumentException();}
 <<EOF>>        							{return magic;}
