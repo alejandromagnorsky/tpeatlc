@@ -42,15 +42,21 @@ W = [\t" "]
 					}
 
 <ELEMENT2>	\n		{
-						e1 += '&';
-						e2 += '&';
-						e1 = e1.replaceAll("[ \t]*&", "");
-						e2 = e2.replaceAll("[ \t]*&", "");
-						String ans = e1+"+"+e2;
-						e1 = null;
-						e2 = null;
-						yybegin(YYINITIAL);
-						return ans;
+						if(e2 == null){
+							e1 = null;
+							System.out.println("/!\\ Comando inválido.");
+							yybegin(YYINITIAL);
+						} else {
+							e1 += '&';
+							e2 += '&';
+							e1 = e1.replaceAll("[ \t]*&", "");
+							e2 = e2.replaceAll("[ \t]*&", "");
+							String ans = e1+"+"+e2;
+							e1 = null;
+							e2 = null;
+							yybegin(YYINITIAL);
+							return ans;
+						}
 					}
 <ERROR>		\n		{System.out.println("/!\\ Comando inválido."); yybegin(YYINITIAL);}
 
