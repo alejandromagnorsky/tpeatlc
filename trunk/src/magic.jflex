@@ -20,7 +20,7 @@ import java.util.List;
 	
 	public Potion getPotion(String yytext){
 		int id1 = 0, id2 = 0;
-		String[] strings = yytext.split(" ");
+		String[] strings = yytext.split("[ \t]");
 		for(int i = 0; i < strings.length; i++)
 			if(strings[i].length() != 0){
 				if(id1 == 0)
