@@ -19,10 +19,10 @@ public class MagicLoader {
 				magic = lexer.yylex();
 			} while (magic == null);
 		} catch (IllegalArgumentException e) {
-			System.out.println("/!\\ Formato de archivo de magias inválido.");
+			System.err.println("/!\\ Formato de archivo de magias inválido.");
 			System.exit(1);
 		} catch (IOException e) {
-			System.out.println("/!\\ Archivo de magias inexistente.");
+			System.err.println("/!\\ Archivo de magias inexistente.");
 			System.exit(1);
 		}
 

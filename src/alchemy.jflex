@@ -6,10 +6,15 @@
 %{
 	private String e1;
 	private String e2;
+	
+	private void printError(){
+		System.err.println("/!\\ Comando inválido.");
+		yybegin(YYINITIAL);
+	}
 %}
 
 L = [a-z!]
-W = [\t" "]
+W = [" "\t]
 %state ELEMENT2
 %state ERROR
 
@@ -44,8 +49,7 @@ W = [\t" "]
 <ELEMENT2>	\n		{
 						if(e2 == null){
 							e1 = null;
-							System.out.println("/!\\ Comando inválido.");
-							yybegin(YYINITIAL);
+							printError();
 						} else {
 							e1 += '&';
 							e2 += '&';
@@ -58,10 +62,13 @@ W = [\t" "]
 							return ans;
 						}
 					}
-<ERROR>		\n		{System.out.println("/!\\ Comando inválido."); yybegin(YYINITIAL);}
-
+<ERROR>		\n		{printError();}
+							
 [^a-z] | {L}+		{
 						e1 = null;
 						e2 = null;
-						yybegin(ERROR);						
+						if(yytext().contains("\n"))
+							printError();
+						else
+							yybegin(ERROR);						
 					}

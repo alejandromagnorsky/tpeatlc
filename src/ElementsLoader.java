@@ -22,10 +22,10 @@ public class ElementsLoader {
 				}
 			} while (!yytext.equals("EOF"));
 		} catch (IllegalArgumentException e) {
-			System.out.println("/!\\ Formato de archivo de nombres inválido.");
+			System.err.println("/!\\ Formato de archivo de nombres inválido.");
 			System.exit(1);
 		} catch (IOException e) {
-			System.out.println("/!\\ Archivo de nombres inexistente.");
+			System.err.println("/!\\ Archivo de nombres inexistente.");
 			System.exit(1);
 		}
 		return elements;

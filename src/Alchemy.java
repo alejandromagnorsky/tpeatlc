@@ -1,10 +1,12 @@
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.util.Collections;
 import java.util.List;
 
 public class Alchemy {
-	private static final String ELEMENTS_DEFAULT = "resources/myelements.name";
-	private static final String MAGIC_DEFAULT = "resources/myelements.magic";
+	private static final String ELEMENTS_DEFAULT = "resources/elements.name";
+	private static final String MAGIC_DEFAULT = "resources/elements.magic";
 	private static String ELEMENTS_SRC = ELEMENTS_DEFAULT;
 	private static String MAGIC_SRC = MAGIC_DEFAULT;
 	private static Alchemist alchemist;
@@ -13,7 +15,7 @@ public class Alchemy {
 		
 		printLogo();
 		
-		alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
+		setAlchemist(ELEMENTS_SRC, MAGIC_SRC);
 		boolean hFlag = false;
 		boolean tFlag = false;
 		boolean bFlag = false;
@@ -30,8 +32,8 @@ public class Alchemy {
 				tFlag = true;				
 			else if (arg1.equals("-b") || arg1.equals("-e") || arg1.equals("-n") || arg1.equals("-m")){
 				if (i+1 >= args.length){
-					System.out.println("/!\\ Secuencia de argumentos inválida.");
-					return;
+					System.err.println("/!\\ Secuencia de argumentos inválida.");
+					System.exit(1);
 				}
 				if (arg1.equals("-b")){
 					bArg = args[++i];
@@ -47,13 +49,13 @@ public class Alchemy {
 					nmFlag = true;
 				}
 			} else {
-				System.out.println("/!\\ Secuencia de argumentos inválida.");
-				return;
+				System.err.println("/!\\ Secuencia de argumentos inválida.");
+				System.exit(1);
 			}
 		}
 
 		if (nmFlag)
-			alchemist = new Alchemist(ELEMENTS_SRC, MAGIC_SRC);
+			setAlchemist(ELEMENTS_SRC, MAGIC_SRC);
 		if (hFlag){
 			printHelpDesk();
 			printBasicElements();
@@ -66,12 +68,18 @@ public class Alchemy {
 		if (eFlag)
 			printDerivedElements(eArg);
 		
-		AlchemyLexer lexer = new AlchemyLexer(System.in);
+		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+		parseInput(reader);
+		System.exit(0);
+	}
+	
+	public static void parseInput(BufferedReader reader) throws IOException{
+		AlchemyLexer lexer = new AlchemyLexer(reader);
 		String yytext = null, element1, element2;
 		Element result;
 		yytext = lexer.yylex();
 		if (yytext == null)
-			System.exit(0);
+			return;
 		do {
 			element1 = yytext.substring(0, yytext.indexOf("+"));
 			element2 = yytext.substring(yytext.indexOf("+") + 1);
@@ -82,7 +90,11 @@ public class Alchemy {
 				System.out.println(result.getName());
 			yytext = lexer.yylex();
 		} while (yytext != null);
-		System.exit(0);
+		
+	}
+	
+	public static void setAlchemist(String elements, String magic){
+		alchemist = new Alchemist(elements, magic);
 	}
 	
 	public static void printLogo(){
