@@ -48,12 +48,12 @@ public class ParserTester extends TestCase {
 
 			stdErr.close();
 			stdOut.close();
-			
+
 			System.setErr(oldErr);
 			System.setOut(oldOut);
-			
-			assertTrue(fileEquals(TEST1_ERR,EXPECTED1_ERR));
-			assertTrue(fileEquals(TEST1_OUT,EXPECTED1_OUT));
+
+			assertTrue(fileEquals(TEST1_ERR, EXPECTED1_ERR));
+			assertTrue(fileEquals(TEST1_OUT, EXPECTED1_OUT));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -66,14 +66,13 @@ public class ParserTester extends TestCase {
 
 			Alchemy.setAlchemist(ELEMENTS_DEFAULT, MAGIC_DEFAULT);
 
-			
 			PrintStream stdErr = new PrintStream(new BufferedOutputStream(
 					new FileOutputStream(TEST2_ERR)));
 			PrintStream stdOut = new PrintStream(new BufferedOutputStream(
 					new FileOutputStream(TEST2_OUT)));
-			
+
 			PrintStream oldErr = System.err;
-			PrintStream oldOut = System.out;			
+			PrintStream oldOut = System.out;
 			System.setErr(stdErr);
 			System.setOut(stdOut);
 
@@ -81,27 +80,32 @@ public class ParserTester extends TestCase {
 
 			stdErr.close();
 			stdOut.close();
-			
+
 			System.setErr(oldErr);
 			System.setOut(oldOut);
 
-			assertTrue(fileEquals(TEST2_ERR,EXPECTED2_ERR));
-			assertTrue(fileEquals(TEST2_OUT,EXPECTED2_OUT));
+			assertTrue(fileEquals(TEST2_ERR, EXPECTED2_ERR));
+			assertTrue(fileEquals(TEST2_OUT, EXPECTED2_OUT));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private boolean fileEquals(String filename1, String filename2) throws IOException{
+
+	private boolean fileEquals(String filename1, String filename2)
+			throws IOException {
 		BufferedReader file1 = new BufferedReader(new FileReader(filename1));
 		BufferedReader file2 = new BufferedReader(new FileReader(filename2));
-		
-		String line1 = null, line2 = null;
-		 while (((line1 = file1.readLine()) != null) && ((line2 = file2.readLine()) != null)) {
-             if(!line1.equals(line2))
-            	return false;
-         }
-		 return true;
+
+		String line1 = "", line2 = "";
+		do {
+			if (!line1.equals(line2))
+				return false;
+			line1 = file1.readLine();
+			line2 = file2.readLine();
+		} while (line1 != null && line2 != null);
+		if (line1 == null && line2 == null)
+			return true;
+		return false;
 	}
 
 }
