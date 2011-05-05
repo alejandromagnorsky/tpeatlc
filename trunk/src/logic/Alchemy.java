@@ -1,3 +1,4 @@
+package logic;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -10,38 +11,48 @@ public class Alchemy {
 	private static String ELEMENTS_SRC = ELEMENTS_DEFAULT;
 	private static String MAGIC_SRC = MAGIC_DEFAULT;
 	private static Alchemist alchemist;
-	
+
 	public static void main(String[] args) throws IOException {
-		
+
 		printLogo();
-		
+
 		setAlchemist(ELEMENTS_SRC, MAGIC_SRC);
 		boolean hFlag = false;
 		boolean tFlag = false;
 		boolean bFlag = false;
 		boolean eFlag = false;
 		boolean nmFlag = false;
-		String bArg = null;
-		String eArg = null;
-		
-		for (int i=0; i < args.length; i++){
+		String bArg = "";
+		String eArg = "";
+
+		for (int i = 0; i < args.length; i++) {
 			String arg1 = args[i];
 			if (arg1.equals("-h"))
 				hFlag = true;
 			else if (arg1.equals("-t"))
-				tFlag = true;				
-			else if (arg1.equals("-b") || arg1.equals("-e") || arg1.equals("-n") || arg1.equals("-m")){
-				if (i+1 >= args.length){
-					System.err.println("/!\\ Secuencia de argumentos inválida.");
+				tFlag = true;
+			else if (arg1.equals("-b") || arg1.equals("-e")
+					|| arg1.equals("-n") || arg1.equals("-m")) {
+				if (i + 1 >= args.length) {
+					System.err
+							.println("/!\\ Invalid argument sequence.");
 					System.exit(1);
 				}
-				if (arg1.equals("-b")){
-					bArg = args[++i];
+				if (arg1.equals("-b")) {
+					do {
+						bArg = bArg + args[++i] + " ";
+					} while (i + 1 < args.length
+							&& args[i + 1].charAt(0) != '-');
+					bArg = bArg.substring(0, bArg.length() - 1);
 					bFlag = true;
-				} else if (arg1.equals("-e")){
-					eArg = args[++i];
+				} else if (arg1.equals("-e")) {
+					do {
+						eArg = eArg + args[++i] + " ";
+					} while (i + 1 < args.length
+							&& args[i + 1].charAt(0) != '-');
+					eArg = eArg.substring(0, eArg.length() - 1);
 					eFlag = true;
-				} else if (arg1.equals("-n")){
+				} else if (arg1.equals("-n")) {
 					ELEMENTS_SRC = args[++i];
 					nmFlag = true;
 				} else {
@@ -49,17 +60,18 @@ public class Alchemy {
 					nmFlag = true;
 				}
 			} else {
-				System.err.println("/!\\ Secuencia de argumentos inválida.");
+				System.err.println("/!\\ Invalid argument sequence.");
 				System.exit(1);
 			}
 		}
 
 		if (nmFlag)
 			setAlchemist(ELEMENTS_SRC, MAGIC_SRC);
-		if (hFlag){
+		if (hFlag) {
 			printHelpDesk();
 			printBasicElements();
-			System.out.println("--------------------------------------------------------------------------------");
+			System.out
+					.println("--------------------------------------------------------------------------------");
 		}
 		if (tFlag)
 			printTerminalElements();
@@ -67,13 +79,14 @@ public class Alchemy {
 			printBasicIngredientsFromElement(bArg);
 		if (eFlag)
 			printDerivedElements(eArg);
-		
-		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
+
+		BufferedReader reader = new BufferedReader(new InputStreamReader(
+				System.in));
 		parseInput(reader);
 		System.exit(0);
 	}
-	
-	public static void parseInput(BufferedReader reader) throws IOException{
+
+	public static void parseInput(BufferedReader reader) throws IOException {
 		AlchemyLexer lexer = new AlchemyLexer(reader);
 		String yytext = null, element1, element2;
 		Element result;
@@ -90,31 +103,36 @@ public class Alchemy {
 				System.out.println(result.getName());
 			yytext = lexer.yylex();
 		} while (yytext != null);
-		
+
 	}
-	
-	public static void setAlchemist(String elements, String magic){
+
+	public static void setAlchemist(String elements, String magic) {
 		alchemist = new Alchemist(elements, magic);
 	}
-	
-	public static void printLogo(){
+
+	public static void printLogo() {
 		System.out.println("	 ___");
 		System.out.println("	 -   -_, ,,      ,,                   -_   _");
 		System.out.println("	(  ~/||  ||      ||                     |,- `");
-		System.out.println("	(  / ||  ||  _-_ ||/\\\\  _-_  \\\\/\\\\/\\\\  ~||__))");
-		System.out.println("	 \\/==||  || ||   || || || \\\\ || || ||  ~||__))");
+		System.out
+				.println("	(  / ||  ||  _-_ ||/\\\\  _-_  \\\\/\\\\/\\\\  ~||__))");
+		System.out
+				.println("	 \\/==||  || ||   || || || \\\\ || || ||  ~||__))");
 		System.out.println("	 /_ _||  || ||   || || ||/   || || ||   |_ _,");
-		System.out.println("	(  - \\\\, \\\\ \\\\,/ \\\\ |/ \\\\,/  \\\\ \\\\ \\\\  -' -");
+		System.out
+				.println("	(  - \\\\, \\\\ \\\\,/ \\\\ |/ \\\\,/  \\\\ \\\\ \\\\  -' -");
 		System.out.println("	                   _/                 ( _-_");
-		System.out.println("==============================================================");
+		System.out
+				.println("==============================================================");
 		System.out.println(randomMrCrowleyQuote());
 		System.out.println(" 					Aleister Crowley");
-		System.out.println("==============================================================");
+		System.out
+				.println("==============================================================");
 	}
-	
-	private static String randomMrCrowleyQuote(){
+
+	private static String randomMrCrowleyQuote() {
 		String quote;
-		switch((int)(Math.random()*10)){
+		switch ((int) (Math.random() * 10)) {
 		case 0:
 			quote = "\"Science is always discovering odd scraps of magical wisdom\nand making a tremendous fuss about its cleverness.\"";
 			break;
@@ -136,79 +154,83 @@ public class Alchemy {
 		}
 		return quote;
 	}
-	
-	public static void printBasicElements(){
+
+	public static void printBasicElements() {
 		List<Element> l = alchemist.getBasicElements();
-		System.out.println("Elementos básicos:");
+		System.out.println("Basic elements:");
 		for (Element e : l)
 			System.out.println(e.getName());
 	}
-	
-	public static void printBasicIngredientsFromElement(String e){
+
+	public static void printBasicIngredientsFromElement(String e) {
 		List<Element> l = alchemist.getBasicIngredientsFromElement(e);
-		if (l == null){
-			System.out.println("/!\\ No existe el elemento '" + e + "'.");
+		if (l == null) {
+			System.out.println("/!\\ '" + e + "' does not exist.");
 		} else {
-			if (!l.isEmpty()){
+			if (!l.isEmpty()) {
 				Collections.sort(l);
-				System.out.println("Elementos básicos que forman '" + e + "':");
+				System.out
+						.println("'" + e + "' is created by:");
 				for (Element elem : l)
 					System.out.println(elem.getName());
 			} else
-				System.out.println(e + " es básico.");
+				System.out
+						.println(e
+								+ " cannot be created by basic elements.");
 		}
 	}
-	
-	public static void printDerivedElements(String e){
+
+	public static void printDerivedElements(String e) {
 		List<Element> l = alchemist.getDerivedElements(e);
-		if (l == null){
-			System.out.println("/!\\ No existe el elemento '" + e + "'.");
+		if (l == null) {
+			System.out.println("/!\\ '" + e + "' does not exist.");
 		} else {
-			if (!l.isEmpty()){
+			if (!l.isEmpty()) {
 				Collections.sort(l);
-				System.out.println("Elementos que pueden ser formados a partir de '" + e + "':");
+				System.out
+						.println("Using '"
+								+ e + "' you can create:");
 				for (Element elem : l)
 					System.out.println(elem.getName());
 			} else
-				System.out.println(e + " es terminal.");
-		}		
+				System.out.println(e + " is a terminal element.");
+		}
 	}
-	
-	public static void printTerminalElements(){
+
+	public static void printTerminalElements() {
 		List<Element> l = alchemist.getTerminalElements();
-		System.out.println("Elementos terminales:");
+		System.out.println("Terminal elements:");
 		for (Element e : l)
 			System.out.println(e.getName());
 	}
-	
+
 	private static void printHelpDesk() {
 		System.out.println("--------------------------------------------------------------------------------");
-		System.out.println("-------------------------------- MESA DE AYUDA ---------------------------------");
+		System.out.println("---------------------------------- HELP DESK -----------------------------------");
 		System.out.println("--------------------------------------------------------------------------------");
-		System.out.println("Juego en el que, partiendo de un grupo de elementos básicos, se deben");
-		System.out.println("formar y descubrir los restantes.");
-		System.out.println("Por ejemplo, si el usuario quiere intentar combinar el elementoA y el");
-		System.out.println("elementoB la sintaxis es de la forma:");
-		System.out.println("elementoA + elementoB");
+		System.out.println("Given a set of basic elements, you must create and discover the rest of them.");
+		System.out.println("For example, if one player wants to try to merge elementA with elementB,");
+		System.out.println("sintaxis should look like:");
+		System.out.println("	elementA + elementB.");
 		System.out.println();
-		System.out.println(">>> COMANDOS ÚTILES:");
-		System.out.println("	- '-e <elemento>':");
-		System.out.println("		Imprime los elementos que se pueden formar usando <elemento>.");
+		System.out.println(">>> USEFUL COMMANDS:");
+		System.out.println("	- '-e <element>':");
+		System.out.println("		Prints <element>'s derived elements. ");
 		System.out.println();
-		System.out.println("	- '-b <elemento>':");
-		System.out.println("		Imprime aquellos elementos que generan <elemento>.");
+		System.out.println("	- '-b <element>':");
+		System.out.println("		Prints those basic elements which can create <element>.");
 		System.out.println();
 		System.out.println("	- '-t':");
-		System.out.println("		Imprime todos los elementos terminales.");
+		System.out.println("		Prints terminal elements.");
 		System.out.println();
-		System.out.println("	- '-n <archivo>':");
-		System.out.println("		Los elementos son cargados desde <archivo>.");
+		System.out.println("	- '-n <file>':");
+		System.out.println("		Loads elements name list from <file>.");
 		System.out.println();
-		System.out.println("	- '-m <archivo>':");
-		System.out.println("		Las magias son cargadas desde <archivo>.");
+		System.out.println("	- '-m <file>':");
+		System.out.println("		Loads magic list from <file>.");
 		System.out.println();
 		System.out.println("	- '-h':");
-		System.out.println("		Imprime la mesa de ayuda.");
+		System.out.println("		Prints help desk.");
 		System.out.println("--------------------------------------------------------------------------------");
 	}
 }

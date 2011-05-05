@@ -8,7 +8,7 @@
 	private String e2;
 	
 	private void printError(){
-		System.err.println("/!\\ Comando inválido.");
+		System.err.println("/!\\ Invalid command.");
 		yybegin(YYINITIAL);
 	}
 %}

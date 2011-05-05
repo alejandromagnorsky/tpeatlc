@@ -1,3 +1,4 @@
+package test;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -6,6 +7,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import junit.framework.TestCase;
+import logic.Alchemy;
 
 import org.junit.Test;
 

@@ -1,4 +1,5 @@
-public class Element implements Comparable<Element>{
+package logic;
+public class Element implements Comparable<Element> {
 
 	private int id;
 	private String name;
@@ -15,7 +16,7 @@ public class Element implements Comparable<Element>{
 	public String getName() {
 		return name;
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -34,10 +35,10 @@ public class Element implements Comparable<Element>{
 	public String toString() {
 		return "Element [id=" + id + ", name=" + name + "]";
 	}
-	
+
 	@Override
 	public int compareTo(Element o) {
 		return this.getName().compareTo(o.getName());
 	}
-	
+
 }

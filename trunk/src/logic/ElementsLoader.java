@@ -1,3 +1,4 @@
+package logic;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -22,10 +23,10 @@ public class ElementsLoader {
 				}
 			} while (!yytext.equals("EOF"));
 		} catch (IllegalArgumentException e) {
-			System.err.println("/!\\ Formato de archivo de nombres inválido.");
+			System.err.println("/!\\ Invalid names file format.");
 			System.exit(1);
 		} catch (IOException e) {
-			System.err.println("/!\\ Archivo de nombres inexistente.");
+			System.err.println("/!\\ Names file not found.");
 			System.exit(1);
 		}
 		return elements;

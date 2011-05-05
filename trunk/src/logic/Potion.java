@@ -1,14 +1,14 @@
+package logic;
 import java.util.ArrayList;
 import java.util.List;
-
 
 public class Potion {
 
 	private List<Element> elements;
-	
-	public Potion(Element e1, Element e2){
+
+	public Potion(Element e1, Element e2) {
 		elements = new ArrayList<Element>();
-		if(e1.getId() < e2.getId()){
+		if (e1.getId() < e2.getId()) {
 			this.elements.add(e1);
 			this.elements.add(e2);
 		} else {
@@ -16,20 +16,21 @@ public class Potion {
 			this.elements.add(e1);
 		}
 	}
-	
-	public Element get(int index){
+
+	public Element get(int index) {
 		return elements.get(index);
 	}
-	
-	public boolean has(Element e){
+
+	public boolean has(Element e) {
 		return elements.contains(e);
 	}
 
 	@Override
 	public int hashCode() {
-		return (int)(Math.pow(2, elements.get(0).getId())*Math.pow(3, elements.get(1).getId()));
+		return (int) (Math.pow(2, elements.get(0).getId()) * Math.pow(3,
+				elements.get(1).getId()));
 	}
-	
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
