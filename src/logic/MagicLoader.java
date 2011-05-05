@@ -1,3 +1,4 @@
+package logic;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Reader;
@@ -19,10 +20,10 @@ public class MagicLoader {
 				magic = lexer.yylex();
 			} while (magic == null);
 		} catch (IllegalArgumentException e) {
-			System.err.println("/!\\ Formato de archivo de magias inválido.");
+			System.err.println("/!\\ Invalid magic file format.");
 			System.exit(1);
 		} catch (IOException e) {
-			System.err.println("/!\\ Archivo de magias inexistente.");
+			System.err.println("/!\\ Magics file not found.");
 			System.exit(1);
 		}
 
