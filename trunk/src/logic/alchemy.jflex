@@ -1,3 +1,4 @@
+package logic;
 %%
 
 %class AlchemyLexer

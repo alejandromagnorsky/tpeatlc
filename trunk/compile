@@ -1,5 +1,5 @@
-jflex src/alchemy.jflex
-jflex src/elements.jflex
-jflex src/magic.jflex
-rm src/*~
+jflex src/logic/alchemy.jflex
+jflex src/logic/elements.jflex
+jflex src/logic/magic.jflex
+rm src/logic/*~
 ant -buildfile build.xml
